@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido de orçamento </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 10px;
+        }
+
+        input, textarea {
+            margin-top: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pedido de Orçamento</h1>
+        <form id="saleForm">
+            <label for="solicitante">Solicitante:</label>
+            <input type="text" id="solicitante" name="solicitante" required>
+            <br>
+            <label for="contato">Contato:</label>
+            <input type="text" id="contato" name="contato" required>
+            <br>
+            <label for="produto">Produto(s):</label>
+            <input type="text" id="produto" name="produto" required>
+            <br>
+            <label for="espec">Especificações:</label>
+            <input type="text" id="espec" name="espec" required>
+            <br>
+            <label for="quantidade">Quantidade:</label>
+            <input type="text" id="quantidade" name="quantidade" required>
+            <br>
+            <label for="valorarte">Valor da Arte:</label>
+            <input type="text" id="valorarte" name="valorarte" required>
+            <br>
+            <label for="varejo">Valor de Varejo:</label>
+            <input type="text" id="varejo" name="varejo" required>
+            <br>
+            <label for="atacado">Valor de Atacado:</label>
+            <input type="text" id="atacado" name="atacado" required>
+            <br>
+            <label for="pagamento">Forma de Pagamento:</label>
+            <input type="text" id="pagamento" name="pagamento" required>
+            <br>
+            <label for="prazo">Prazo de entrega:</label>
+            <input type="text" id="prazo" name="prazo" required>
+            <br>
+            <label for="imagemCliente">Imagem enviada pelo cliente:</label>
+            <input type="file" id="imagemCliente" accept="image/*">
+            <br>
+            <label for="imagemProjeto">Pré Projeto/Mockup:</label>
+            <input type="file" id="imagemProjeto" accept="image/*">
+            <br>
+            <button type="button" onclick="generateDocument()">Gerar Documento</button>
+        </form>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        function generateDocument() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const solicitante = document.getElementById('solicitante').value;
+            const contato = document.getElementById('contato').value;
+            const produto = document.getElementById('produto').value;
+            const espec = document.getElementById('espec').value;
+            const valorarte = document.getElementById('valorarte').value;
+            const quantidade = document.getElementById('quantidade').value;
+            const varejo = document.getElementById('varejo').value;
+            const atacado = document.getElementById('atacado').value;
+            const pagamento = document.getElementById('pagamento').value;
+            const prazo = document.getElementById('prazo').value;
+            const imagemCliente = document.getElementById('imagemCliente').files[0];
+            const imagemProjeto = document.getElementById('imagemProjeto').files[0]; 
+            const titulo = 'Pedido de Orçamento';
+            const texto = `
+            Solicitante: ${solicitante}
+            Contato: ${contato}
+            Produto(s): ${produto}
+            Especificações: ${espec}
+            Quantidade: ${quantidade}
+            Valor da Arte: ${valorarte}
+            Valor de Varejo: ${varejo}
+            Valor de Atacado: ${atacado}
+            Forma de Pagamento: ${pagamento}
+            Prazo de Entrega: ${prazo}
+            
+            `;
+
+            doc.setFontSize(24);
+            var pageWidth = doc.internal.pageSize.getWidth();
+            var textWidth = doc.getStringUnitWidth(titulo) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+            var xOffset = (pageWidth - textWidth) / 2;
+            doc.setFont('helvetica', 'normal');
+            
+            doc.setFontSize(24);
+            doc.text(titulo, xOffset, 10);
+            doc.setFontSize(12);
+            doc.text(texto, 20, 20);
+
+            if (imagemCliente) {
+                const readerCliente = new FileReader();
+                readerCliente.onload = function(event) {
+                    const imageDataCliente = event.target.result;
+                    doc.addImage(imageDataCliente, 'JPEG', 20, 100, 80, 50);
+                    doc.text('Imagem enviada pelo cliente:', 20, 90);
+                    
+                    if (imagemProjeto) {
+                        const readerProjeto = new FileReader();
+                        readerProjeto.onload = function(event) {
+                            const imageDataProjeto = event.target.result;
+                            doc.addImage(imageDataProjeto, 'JPEG', 20, 170, 80, 50);
+                            doc.text('Pré Projeto/Mockup:', 20, 160);
+                            doc.save('documento_venda.pdf');
+                        };
+                        readerProjeto.readAsDataURL(imagemProjeto);
+                    } else {
+                        doc.save('documento_venda.pdf');
+                    }
+                };
+                readerCliente.readAsDataURL(imagemCliente);
+            } else {
+                if (imagemProjeto) {
+                    const readerProjeto = new FileReader();
+                    readerProjeto.onload = function(event) {
+                        const imageDataProjeto = event.target.result;
+                        doc.addImage(imageDataProjeto, 'JPEG', 20, 170, 80, 50);
+                        doc.text('Pré Projeto/Mockup', 20, 160);
+                        doc.save('documento_venda.pdf');
+                    };
+                    readerProjeto.readAsDataURL(imagemProjeto);
+                } else {
+                    doc.save('documento_venda.pdf');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
