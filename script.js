@@ -85,7 +85,7 @@ function generateDocument() {
         const imagem = new Image();
         imagem.src = "logo.jpeg";
         imagem.onload = function () {
-            doc.addImage(imagem, 'JPEG', xOffset, 10, 96, 28);
+            doc.addImage(imagem, 'JPEG', xOffset, 0, 96, 28);
             doc.save('documento_venda.pdf');
         };
     }
