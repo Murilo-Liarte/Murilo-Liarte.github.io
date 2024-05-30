@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido de orçamento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 10px;
+        }
+
+        input, textarea {
+            margin-top: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+        <img src="logo.jpeg"  style="display:none"/>
+    <div class="container">
+        <h1>Pedido de Orçamento</h1>
+        <form id="saleForm">
+            <label for="solicitante">Solicitante:</label>
+            <input type="text" id="solicitante" name="solicitante" required>
+            <br>
+            <label for="contato">Contato:</label>
+            <input type="text" id="contato" name="contato" required>
+            <br>
+            <label for="produto">Produto(s):</label>
+            <input type="text" id="produto" name="produto" required>
+            <br>
+            <label for="espec">Especificações:</label>
+            <input type="text" id="espec" name="espec" required>
+            <br>
+            <label for="quantidade">Quantidade:</label>
+            <input type="text" id="quantidade" name="quantidade" required>
+            <br>
+            <label for="valorarte">Valor da Arte:</label>
+            <input type="text" id="valorarte" name="valorarte" required>
+            <br>
+            <label for="varejo">Valor de Varejo:</label>
+            <input type="text" id="varejo" name="varejo" required>
+            <br>
+            <label for="atacado">Valor de Atacado:</label>
+            <input type="text" id="atacado" name="atacado" required>
+            <br>
+            <label for="pagamento">Forma de Pagamento:</label>
+            <input type="text" id="pagamento" name="pagamento" required>
+            <br>
+            <label for="prazo">Prazo de entrega:</label>
+            <input type="text" id="prazo" name="prazo" required>
+            <br>
+            <label for="imagemCliente">Imagem enviada pelo cliente:</label>
+            <input type="file" id="imagemCliente" accept="image/*">
+            <br>
+            <label for="imagemProjeto">Pré Projeto/Mockup:</label>
+            <input type="file" id="imagemProjeto" accept="image/*">
+            <br>
+            <button type="button" onclick="generateDocument()">Gerar Documento</button>
+        </form>
+    </div>
+    <img src="image/logo.png" id="logo" style="display: none;">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js"></script>
+    
+</body>
+</html>
